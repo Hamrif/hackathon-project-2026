@@ -1,0 +1,15 @@
+{
+  "name": "hackathon",
+  "version": "1.0.0",
+  "description": "This is a website for recommending recipies from the fridge .",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Samarth , sakeef , manthan, Rifat",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^4.0.1",
+    "express": "^5.2.1"
+  }
+}
