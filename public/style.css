@@ -1,6 +1,101 @@
-#logo{
-    height:70px;
-    color:white;
-    background-color: black;
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box; /* Ensures padding doesn't mess with widths */
+    font-family: Arial, Helvetica, sans-serif;
+}
 
+.frontpage {
+    display: flex;
+    width: 100%;
+    height: 100vh; /* Changed to 100vh to fill the screen */
+    background-image: url('/asset/bg.jpg'); /* Make sure this path is correct */
+    background-size: cover;
+    background-position: center;
+} 
+
+#overlay {
+    width: 100%;
+    height: 100%;
+    /* Dark matcha green semi-transparent overlay */
+    background-color: rgba(46, 56, 25, 0.75); 
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    display: flex;
+    margin-top: 2vh;
+    height: 10%;
+    width: 100vw;
+    background-color: transparent;
+    align-items: center;
+    padding: 0 8vw; /* Matches the Netflix margins */
+}
+
+#logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #e8f5e9; /* Very light green/white */
+    letter-spacing: 1px;
+}
+
+.herotext {
+    background-color: transparent;
+    width: 100%;
+    margin-top: 20vh;
+    text-align: center;
+    color: #ffffff;
+    line-height: 1.6;
+    padding: 0 20px;
+}
+
+.herotext h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.introtext {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.input-group {
+    margin-top: 4vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Spaces out the input and button */
+}
+
+#hero-input {
+    height: 55px;
+    width: 350px;
+    border: 2px solid #a3c9a8; /* Lighter matcha border */
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 4px;
+    padding-left: 15px;
+    font-size: 1rem;
+    color: #333;
+}
+
+#hero-input::placeholder {
+    color: #777;
+}
+
+#heroStart {
+    background-color: #78A153; /* Vibrant matcha green */
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0 25px;
+    height: 55px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#heroStart:hover {
+    background-color: #5c7d3e; /* Darker green on hover */
 }
