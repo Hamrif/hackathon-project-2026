@@ -31,6 +31,7 @@ app.get("/home", (req,res)=>{
 
 app.post("/analyze-image", upload.single("image"), async (req,res)=>{
     const file = req.file;
+    console.log(GEMINI_API_KEY);
     if(!file) return res.status(400).send("No file uploaded");
     const model = gemini_ai.getGenerativeModel({
         model: "gemini-2.5-flash",
