@@ -10,7 +10,12 @@
 </head>
 <body>
     <div class="navbar"><div id="logo"> What the fridge? </div></div>
-    <div class ="main"></div>
+    <div class ="main">
+        <form action="/analyze-image" method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit">Analyze</button>
+        </form>
+    </div>
     <div class="footer"></div>
     
 </body>
