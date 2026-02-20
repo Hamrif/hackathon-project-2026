@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>What the fridge?</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="/asset/logo.jpeg">
-</head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="/asset/logo.jpeg" />
+  </head>
 
 <body id="top">
     <main class="frontpage">
@@ -30,7 +29,9 @@
                 </div>
             </div>
 
-        </div>
+          
+        
+      </div>
     </main>
 
     <footer class="footer">
@@ -47,6 +48,12 @@
             </div>
         </div>
     </footer>
-</body>
 
+
+
+    <form action="/analyze-image" method="POST" enctype="multipart/form-data">
+      <input type="file" name="image" accept="image/*" required />
+      <button type="submit">Analyze</button>
+    </form>
+  </body>
 </html>
