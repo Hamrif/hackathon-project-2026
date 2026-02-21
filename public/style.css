@@ -66,11 +66,12 @@
     color:gold;
 }
 .littletxt{
+    font-family:  'Times New Roman', Times, serif;
     font-size:1.20rem;
     line-height: 1.7;
 }
 .herotext h1 {
-    font-size: 2.5rem;
+    font-size: 1rem;
     margin-bottom: 10px;
     font-size:6vw;
     line-height: 1.05;
@@ -195,7 +196,7 @@
     transform: translateY(-2px); /* Slight lift effect */
 }
 
-/* Author Links Styling */
+
 .footer-links {
     text-align: center;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
