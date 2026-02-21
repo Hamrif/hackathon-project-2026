@@ -8,6 +8,7 @@ const port = 3000;
 const path = require("path");
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const SPOONACULAR_API_KEY = process.env.SPOONACULAR_API_KEY;
 const upload = multer({ storage: multer.memoryStorage() });
 const gemini_ai = new GoogleGenerativeAI(GEMINI_API_KEY);
 
@@ -69,5 +70,23 @@ app.post("/analyze-image", upload.single("image"), async (req, res) => {
     } catch (error) {
         console.error("Error analyzing image:", error);
         res.status(500).send("Error analyzing image");
+    }
+});
+
+app.post("/get-recipes", async (req, res) => {
+    const ingredients = req.body.ingredients;
+
+    if (!ingredients) return res.status(400).send("No ingredients provided");
+
+    const ingredientsString = Array.isArray(ingredients) ? ingredients.join(",") : ingredients;
+
+    try {
+        const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsString}&number=10&apiKey=${SPOONACULAR_API_KEY}`);
+        if (!response.ok) throw new Error("Failed to fetch recipes");
+        const recipes = await response.json();
+        res.render("recipes.ejs", { recipes: recipes });
+    } catch (error) {
+        console.error("Error fetching recipes:", error);
+        res.status(500).send("Error fetching recipes");
     }
 });
