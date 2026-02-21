@@ -5,16 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recipes — What The Fridge?</title>
   <link rel="icon" type="image/png" href="/asset/logo.jpeg" />
-  <link rel="stylesheet" href="/recipes.css" />
+  <link rel="stylesheet" href="/style3.css" />
+  <style>
+    /* Ensures the button stays at the bottom regardless of content height */
+    .recipe-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .recipe-body {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      padding: 20px;
+    }
+    .recipe-footer {
+      margin-top: auto; /* Pushes the button to the bottom */
+      padding-top: 20px;
+    }
+    .btn-details {
+      display: block;
+      text-align: center;
+      background-color: var(--green-darkest, #1a3c1c);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .btn-details:hover {
+      filter: brightness(1.2);
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body id="top">
 
-  <nav>
-    <a href="/" class="nav-logo">What The Fridge?</a>
+  <nav class="navbar">
+    <div class="navlogo">
+      <img src="/asset/real bg.png" alt="logo">
+    </div>
+    <div id="logo">What The Fridge?</div>
+    <a href="/home" class="nav-back">← Home</a>
+    <a href="/ingredients" class="back-button">Back to Ingredients</a>
   </nav>
 
   <main>
-    <a href="/ingredients" class="back-button">Back to Ingredients</a>
     <h1 class="page-title">Here's what you can make</h1>
 
     <% if (readyToCook.length === 0 && shoppingRequired.length === 0) { %>
@@ -43,7 +81,7 @@
                 <% } %>
               </div>
             </div>
-            <% if (r.optional.length > 0) { %>
+            <% if (r.optional && r.optional.length > 0) { %>
             <div class="ingredient-group">
               <span class="ingredient-label">Optional</span>
               <div class="ingredient-tags">
@@ -53,6 +91,10 @@
               </div>
             </div>
             <% } %>
+            
+            <div class="recipe-footer">
+              <a href="/recipe/<%= r.id %>" class="btn-details">See Details</a>
+            </div>
           </div>
         </div>
         <% } %>
@@ -87,7 +129,7 @@
                 <% } %>
               </div>
             </div>
-            <% if (r.optional.length > 0) { %>
+            <% if (r.optional && r.optional.length > 0) { %>
             <div class="ingredient-group">
               <span class="ingredient-label">Optional</span>
               <div class="ingredient-tags">
@@ -97,13 +139,16 @@
               </div>
             </div>
             <% } %>
+
+            <div class="recipe-footer">
+              <a href="/recipe/<%= r.id %>" class="btn-details">See Details</a>
+            </div>
           </div>
         </div>
         <% } %>
       </div>
     </section>
     <% } %>
-
   </main>
 
   <footer class="footer">
@@ -122,5 +167,3 @@
 
 </body>
 </html>
-
-

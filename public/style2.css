@@ -376,15 +376,14 @@ button, .action-btn {
   box-shadow: 0 8px 24px rgba(92,125,62,0.5);
 }
 .secondary-btn {
-  background: rgba(92,125,62,0.2);
-  color: var(--green-pale);
-  border: 1px solid rgba(92,125,62,0.35);
+   background: var(--green-mid);
+  color: var(--white);
+  box-shadow: 0 4px 16px rgba(92,125,62,0.35);
 }
 .secondary-btn:hover {
-  background: rgba(92,125,62,0.35);
-  color: var(--cream);
-  border-color: var(--green-mid);
+  background: var(--green-light);
   transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(92,125,62,0.5);
 }
 
 /* ── RIGHT PANEL ── */
