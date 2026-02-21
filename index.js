@@ -221,7 +221,9 @@ function isOptionalAisle(aisle) {
     const a = aisle.toLowerCase();
     return a.includes('spice') || a.includes('season') ||
            a.includes('oil') || a.includes('vinegar') ||
-           a.includes('baking') || a.includes('condiment');
+           a.includes('baking') || a.includes('condiment') || 
+           a.includes('sauce') || a.includes('dressing') ||
+           a.includes('herb');
 }
 
 function processRecipes(recipes) {
@@ -288,9 +290,6 @@ app.post("/get-recipes", async (req, res) => {
         }
         
         const recipes = await response.json();
-        console.log("=== SPOONACULAR RESPONSE ===");
-        console.log(JSON.stringify(recipes, null, 2));
-        console.log("=== END SPOONACULAR RESPONSE ===");
         const { readyToCook, shoppingRequired } = processRecipes(recipes);
         res.render("recipes.ejs", { readyToCook, shoppingRequired });
     } catch (error) {
