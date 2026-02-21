@@ -47,8 +47,6 @@ body {
   overflow-x: hidden;
 }
 
-
-
 /* ── FLOATING ORBS (shared background atmosphere) ───────── */
 .float-orb {
   position: fixed;
@@ -162,9 +160,6 @@ button, .action-btn {
   to { transform: scale(4); opacity: 0; }
 }
 
-
-
-
 /* ==========================================================
    INGREDIENTS PAGE (style2.css)
    ========================================================== */
@@ -176,14 +171,12 @@ button, .action-btn {
   padding: 76px 40px 96px;
   position: relative;
   z-index: 1;
-  
 }
 
 .page-header {
   text-align: center;
   margin-bottom: 52px;
   animation: heroFadeUp 0.8s cubic-bezier(0.16,1,0.3,1) both;
-  
 }
 .page-badge {
   display: inline-block;
@@ -222,6 +215,8 @@ button, .action-btn {
   gap: 28px;
   align-items: start;
   animation: heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s both;
+  /* Prevent grid blowout from long text */
+  min-width: 0; 
 }
 
 /* ── CARDS (shared) ── */
@@ -233,6 +228,7 @@ button, .action-btn {
   box-shadow: var(--shadow-md);
   transition: border-color var(--transition);
   margin-bottom: 50px;
+  min-width: 0; /* Ensures card can shrink */
 }
  .list-card {
   background: transparent;
@@ -241,6 +237,7 @@ button, .action-btn {
   padding: 36px;
   box-shadow: var(--shadow-md);
   transition: border-color var(--transition);
+  min-width: 0; /* Ensures card can shrink */
 }
 .input-card:hover, .list-card:hover {
   border-color: rgba(92,125,62,0.4);
@@ -294,11 +291,13 @@ button, .action-btn {
   display: flex;
   gap: 10px;
   align-items: stretch;
+  min-width: 0; /* Flexbox safety */
 }
 
 /* Text input */
 .text-input {
   flex: 1;
+  min-width: 0; /* Allows the input to shrink smaller than its content if needed */
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(92,125,62,0.25);
   border-radius: var(--radius-md);
@@ -337,6 +336,8 @@ button, .action-btn {
   cursor: pointer;
   transition: all var(--transition);
   overflow: hidden;
+  min-width: 0;
+  max-width: 300px; /* <--- NEW FIX: Limits the max width of the input button */
 }
 .file-label:hover {
   border-color: var(--green-mid);
@@ -345,7 +346,7 @@ button, .action-btn {
 .file-input-hidden {
   position: absolute;
   opacity: 0;
-  width: 0; height: 0;
+  width: 10rem; height: 0;
 }
 .file-label-text {
   font-family: var(--font-body);
@@ -354,6 +355,7 @@ button, .action-btn {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 
 /* Action buttons */
@@ -391,6 +393,7 @@ button, .action-btn {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  min-width: 0; /* Safety measure */
 }
 
 .list-card {
@@ -426,6 +429,7 @@ button, .action-btn {
   gap: 7px;
   max-height: 320px;
   overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
   padding-right: 4px;
 }
 #ingredientList::-webkit-scrollbar { width: 3px; }
@@ -443,6 +447,7 @@ button, .action-btn {
   font-size: 1.4rem;
   color: var(--green-mid);
   transition: all 0.22s ease;
+  max-width: 100%; /* Keep item within boundaries */
 }
 .ingredient-item.entering {
   opacity: 0.5;
@@ -472,7 +477,15 @@ button, .action-btn {
   border-radius: 50%;
   flex-shrink: 0;
 }
-.item-text { flex: 1; }
+
+/* THE FIX IS HERE */
+.item-text { 
+  flex: 1; 
+  min-width: 0; /* CRITICAL: Allows flex child to shrink properly */
+  word-wrap: break-word; /* Forces long unbroken text to wrap */
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
 
 .remove-btn {
   background: transparent;
@@ -580,5 +593,8 @@ button, .action-btn {
 
   .input-row { flex-direction: column; }
   .action-btn { width: 100%; }
-  .file-label { width: 100%; }
+  .file-label { 
+    width: 100%; 
+    max-width: none; /* <--- NEW FIX: Removes the 300px limit on mobile so it spans cleanly */
+  }
 }
