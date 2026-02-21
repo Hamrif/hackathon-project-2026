@@ -73,6 +73,9 @@
     font-size:6vw;
     line-height: 1.05;
 }
+.herotext em {
+    color:#c9a84c;
+}
 
 .introtext {
     font-size: 1.2rem;
