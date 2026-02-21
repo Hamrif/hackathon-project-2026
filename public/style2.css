@@ -140,7 +140,7 @@ body {
   border-color: var(--green-mid);
 }
 
-/* ── SHARED BUTTONS ──────────────────────────────────────── */
+
 button, .action-btn {
   font-family: var(--font-body);
   cursor: pointer;
@@ -515,7 +515,7 @@ button, .action-btn {
 }
 .empty-hint { font-size: 0.8rem; color: rgba(168,200,128,0.2); }
 
-/* Generate button */
+
 .generate-btn {
   width: 100%;
   padding: 22px;

@@ -62,6 +62,9 @@
     padding: 0 20px;
     
 }
+.herotext em {
+    color:gold;
+}
 .littletxt{
     font-size:1.20rem;
     line-height: 1.7;
