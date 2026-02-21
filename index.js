@@ -31,8 +31,15 @@ app.get("/home", (req, res) => {
 
 app.get("/ingredients", (req, res) => {
     // Test data so we don't have to rely on api
+    USE_TEST_DATA = true;
+    
     const testIngredients = ["chicken breast", "garlic", "onion", "tomatoes", "olive oil", "rice", "bell pepper", "cheese"];
-    res.render("ingredients.ejs", { ingredients: testIngredients });
+
+    if (USE_TEST_DATA) {
+      res.render("ingredients.ejs", { ingredients: testIngredients });
+    } else {
+      res.render("ingredients.ejs", { ingredients: [] });
+    }
 });
 
 app.post("/analyze-image", upload.single("image"), async (req, res) => {
@@ -208,6 +215,52 @@ const TEST_RECIPES = [
   }
 ];
 
+
+function isOptionalAisle(aisle) {
+    if (!aisle) return false;
+    const a = aisle.toLowerCase();
+    return a.includes('spice') || a.includes('season') ||
+           a.includes('oil') || a.includes('vinegar') ||
+           a.includes('baking') || a.includes('condiment');
+}
+
+function processRecipes(recipes) {
+    const readyToCook = [];
+    const shoppingRequired = [];
+
+    for (const r of recipes) {
+        const used = r.usedIngredients || [];
+        const missed = r.missedIngredients || [];
+        const requiredMissing = [];
+        const optionalMissing = [];
+
+        for (const m of missed) {
+            if (isOptionalAisle(m.aisle)) {
+                optionalMissing.push(m);
+            } else {
+                requiredMissing.push(m);
+            }
+        }
+
+        if (requiredMissing.length <= 3) {
+            const processed = {
+                title: r.title,
+                image: r.image,
+                used: used,
+                missing: requiredMissing,
+                optional: optionalMissing
+            };
+            if (requiredMissing.length === 0) {
+                readyToCook.push(processed);
+            } else {
+                shoppingRequired.push(processed);
+            }
+        }
+    }
+
+    return { readyToCook, shoppingRequired };
+}
+
 app.post("/get-recipes", async (req, res) => {
     const ingredients = req.body.ingredients;
 
@@ -217,7 +270,8 @@ app.post("/get-recipes", async (req, res) => {
     const USE_TEST_DATA = true;
 
     if (USE_TEST_DATA) {
-        res.render("recipes.ejs", { recipes: TEST_RECIPES });
+        const { readyToCook, shoppingRequired } = processRecipes(TEST_RECIPES);
+        res.render("recipes.ejs", { readyToCook, shoppingRequired });
         return;
     }
 
@@ -236,7 +290,8 @@ app.post("/get-recipes", async (req, res) => {
         console.log("=== SPOONACULAR RESPONSE ===");
         console.log(JSON.stringify(recipes, null, 2));
         console.log("=== END SPOONACULAR RESPONSE ===");
-        res.render("recipes.ejs", { recipes: recipes });
+        const { readyToCook, shoppingRequired } = processRecipes(recipes);
+        res.render("recipes.ejs", { readyToCook, shoppingRequired });
     } catch (error) {
         console.error("Error fetching recipes:", error);
     }
