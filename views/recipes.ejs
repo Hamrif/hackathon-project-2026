@@ -1,39 +1,56 @@
 <!DOCTYPE html>
-<link rel="stylesheet"  href="style3.css">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suggested Recipes</title>
+    <title>Suggested Recipes - What The Fridge?</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" href="/asset/logo.jpeg" />
     <style>
-        body { font-family: sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        /* Scoped styles specifically for the recipes grid */
+        .recipes-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
         .recipes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-        .recipe-card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .recipe-card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fff; cursor: pointer; transition: transform 0.2s ease; }
+        .recipe-card:hover { transform: translateY(-5px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .recipe-card img { width: 100%; height: 200px; object-fit: cover; }
         .recipe-content { padding: 15px; }
-        .recipe-title { font-size: 1.1em; margin: 0 0 10px 0; font-weight: bold; }
-        .back-link { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; }
+        .recipe-title { font-size: 1.1em; margin: 0 0 10px 0; font-weight: bold; color: #333; }
+        .back-link { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
+        .back-link:hover { text-decoration: underline; }
     </style>
 </head>
-<body>
-    <a href="/home" class="back-link">&larr; Back to Home</a>
-    <h1>Suggested Recipes</h1>
+<body id="top">
 
-    <div class="recipes-grid">
-        <% if (recipes && recipes.length > 0) { %>
-            <% recipes.forEach(function(recipe) { %>
-                <div class="recipe-card">
-                    <img src="<%= recipe.image %>" alt="<%= recipe.title %>">
-                    <div class="recipe-content">
-                        <div class="recipe-title"><%= recipe.title %></div>
-                        <p><strong>Used Ingredients:</strong> <%= recipe.usedIngredientCount %></p>
-                        <p><strong>Missed Ingredients:</strong> <%= recipe.missedIngredientCount %></p>
+    <nav class="navbar">
+        <div class="navlogo">
+            <img src="/asset/real bg.png" alt="logo">
+        </div>
+        <div id="logo">What The Fridge?</div>
+    </nav>
+
+    <main class="recipes-container">
+        <a href="/ingredients" class="back-link">&larr; Back to Ingredients</a>
+        <h1>Suggested Recipes</h1>
+
+        <div class="recipes-grid">
+            <% if (recipes && recipes.length > 0) { %>
+                <% recipes.forEach(function(recipe) { %>
+                    <div class="recipe-card" onclick="window.location.href='/recipe/<%= recipe.id %>'">
+                        <img src="<%= recipe.image %>" alt="<%= recipe.title %>">
+                        <div class="recipe-content">
+                            <div class="recipe-title"><%= recipe.title %></div>
+                            <p><strong>Used Ingredients:</strong> <%= recipe.usedIngredientCount %></p>
+                            <p><strong>Missed Ingredients:</strong> <%= recipe.missedIngredientCount %></p>
+                        </div>
                     </div>
-                </div>
-            <% }); %>
-        <% } else { %>
-            <p>No recipes found matching your ingredients.</p>
-        <% } %>
-    </div>
+                <% }); %>
+            <% } else { %>
+                <p>No recipes found matching your ingredients.</p>
+            <% } %>
+        </div>
+    </main>
+
+    
+
 </body>
 </html>
