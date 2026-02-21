@@ -33,7 +33,7 @@
         <div class="page-header">
             
             <h1 class="page-title">What's in your fridge?</h1>
-            <p class="page-sub">Scan your fridge or type in ingredients we'll craft the perfect recipe.</p>
+            <p class="page-sub">Scan your fridge or type in ingredients — we'll craft the perfect recipe.</p>
         </div>
 
         <div class="dashboard-container">
@@ -123,115 +123,63 @@
 
 
     <script>
-  const input = document.getElementById('ingredientInput');
+        // ── File input label update
+        document.getElementById('fileInput').addEventListener('change', function() {
+            const label = document.getElementById('fileLabel');
+            label.textContent = this.files[0] ? this.files[0].name : 'Choose photo…';
+        });
+
+        // ── Ingredient logic
+        const input = document.getElementById('ingredientInput');
         const addBtn = document.getElementById('addBtn');
         const list = document.getElementById('ingredientList');
-        const generateBtn = document.getElementById('generateRecipeBtn');
+        const countEl = document.getElementById('ingredientCount');
 
-        addBtn.addEventListener('click', () => {
-            const value = input.value.trim();
-            if (value !== "") {
-                addIngredient(value);
-                input.value = ''; 
+        function getCount() {
+            return list.querySelectorAll('.ingredient-item').length;
+        }
+
+        function updateCount() {
+            const c = getCount();
+            countEl.textContent = c;
+            countEl.style.background = c > 0 ? 'var(--green-mid)' : 'rgba(255,255,255,0.1)';
+        }
+        updateCount();
+
+        function addIngredient() {
+            const val = input.value.trim();
+            if (!val) {
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 400);
+                return;
             }
-        });
 
-        input.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                addBtn.click();
-            }
-        });
-
-        function addIngredient(name) {
-            const emptyMsg = list.querySelector('.empty-state');
-            if(emptyMsg) emptyMsg.remove();
+            // Hide empty state
+            const empty = document.getElementById('emptyState');
+            if (empty) empty.style.display = 'none';
 
             const li = document.createElement('li');
-            li.textContent = name + " ";
-            
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = 'x';
-            removeBtn.className = 'remove-btn';
-            
-            removeBtn.onclick = function() {
-                li.remove();
-            };
-
-            li.appendChild(removeBtn);
+            li.className = 'ingredient-item entering';
+            li.innerHTML = `
+                <span class="item-dot"></span>
+                <span class="item-text">${val}</span>
+                <button class="remove-btn" title="Remove">✕</button>
+            `;
             list.appendChild(li);
+            requestAnimationFrame(() => li.classList.remove('entering'));
+
+            li.querySelector('.remove-btn').addEventListener('click', () => removeItem(li));
+
+            input.value = '';
+            input.focus();
+            updateCount();
+            list.scrollTop = list.scrollHeight;
         }
 
-        document.querySelectorAll('.remove-btn').forEach(button => {
-            button.onclick = function() {
-                this.parentElement.remove();
-            };
-        });
-
-        if (generateBtn) {
-            generateBtn.addEventListener('click', () => {
-                const ingredients = [];
-                const listItems = list.querySelectorAll('li');
-                
-                listItems.forEach(li => {
-                    // Extract text content, ignoring the button element inside the li
-                    let text = '';
-                    li.childNodes.forEach(node => {
-                        if (node.nodeType === 3) { // Node.TEXT_NODE
-                            text += node.textContent;
-                        }
-                    });
-                    const trimmed = text.trim();
-                    if (trimmed) ingredients.push(trimmed);
-                });
-
-                if (ingredients.length === 0) {
-                    alert('Please add ingredients first.');
-                    return;
-                }
-
-                // Create a hidden form to submit the ingredients to the server
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/get-recipes';
-                form.style.display = 'none';
-
-                ingredients.forEach(ing => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'ingredients';
-                    input.value = ing;
-                    form.appendChild(input);
-                });
-
-                document.body.appendChild(form);
-                form.submit();
-            });
-        }
-
-        // Handle image upload form to preserve existing ingredients
-        const uploadForm = document.querySelector('form[action="/analyze-image"]');
-        if (uploadForm) {
-            uploadForm.addEventListener('submit', function() {
-                const listItems = list.querySelectorAll('li');
-                listItems.forEach(li => {
-                    // Extract text content, ignoring the button element inside the li
-                    let text = '';
-                    li.childNodes.forEach(node => {
-                        if (node.nodeType === 3) { // Node.TEXT_NODE
-                            text += node.textContent;
-                        }
-                    });
-                    const trimmed = text.trim();
-                    if (trimmed) {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = 'existingIngredients';
-                        input.value = trimmed;
-                        this.appendChild(input);
-                    }
-                });
-            });
-        }
+        function removeItem(li) {
+            li.classList.add('leaving');
+            setTimeout(() => {
+                li.remove();
                 updateCount();
                 if (getCount() === 0) {
                     const empty = document.getElementById('emptyState');
@@ -301,6 +249,6 @@
         });
     </script>
 
-    
+    <script src="app.js"></script>
 </body>
 </html>
