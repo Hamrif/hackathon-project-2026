@@ -81,8 +81,14 @@ app.post("/get-recipes", async (req, res) => {
     const ingredientsString = Array.isArray(ingredients) ? ingredients.join(",") : ingredients;
 
     try {
-        const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsString}&number=10&apiKey=${SPOONACULAR_API_KEY}`);
-        if (!response.ok) throw new Error("Failed to fetch recipes");
+        const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(ingredientsString)}&number=10&apiKey=${SPOONACULAR_API_KEY}`);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Spoonacular API Error:", response.status, errorText);
+            throw new Error(`Failed to fetch recipes: ${response.status}`);
+        }
+        
         const recipes = await response.json();
         res.render("recipes.ejs", { recipes: recipes });
     } catch (error) {
