@@ -246,6 +246,7 @@ function processRecipes(recipes) {
 
         if (requiredMissing.length <= 3) {
             const processed = {
+                id: r.id,
                 title: r.title,
                 image: r.image,
                 used: used,
@@ -262,6 +263,31 @@ function processRecipes(recipes) {
 
     return { readyToCook, shoppingRequired };
 }
+
+// Test data for recipe details
+const TEST_RECIPE_DETAILS = {
+    id: 642303,
+    title: "Eggplant Pizzette",
+    image: "https://img.spoonacular.com/recipes/642303-556x370.jpg",
+    readyInMinutes: 45,
+    servings: 4,
+    summary: "A delicious eggplant pizzette recipe.",
+    extendedIngredients: [
+        { original: "1 large eggplant" },
+        { original: "2 tomatoes" },
+        { original: "1/2 cup cheese" }
+    ],
+    analyzedInstructions: [
+        {
+            name: "",
+            steps: [
+                { number: 1, step: "Slice the eggplant into rounds." },
+                { number: 2, step: "Top with tomatoes and cheese." },
+                { number: 3, step: "Bake at 400F for 20 minutes." }
+            ]
+        }
+    ]
+};
 
 app.post("/get-recipes", async (req, res) => {
     const ingredients = req.body.ingredients;
@@ -294,5 +320,33 @@ app.post("/get-recipes", async (req, res) => {
         res.render("recipes.ejs", { readyToCook, shoppingRequired });
     } catch (error) {
         console.error("Error fetching recipes:", error);
+    }
+});
+
+app.get("/recipe/:id", async (req, res) => {
+    const id = req.params.id;
+    
+    // Set this to FALSE to use the real Spoonacular API
+    const USE_TEST_DATA = true; 
+
+    if (USE_TEST_DATA) {
+        // Updated to render recipe.ejs
+        res.render("recipes.ejs", { recipe: TEST_RECIPE_DETAILS });
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${SPOONACULAR_API_KEY}`);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch recipe details: ${response.status}`);
+        }
+
+        const recipe = await response.json();
+        // Updated to render recipe.ejs
+        res.render("recipes.ejs", { recipe }); 
+    } catch (error) {
+        console.error("Error fetching recipe details:", error);
+        res.status(500).send("Error fetching recipe details");
     }
 });

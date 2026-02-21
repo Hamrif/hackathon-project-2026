@@ -39,6 +39,13 @@
       filter: brightness(1.2);
       transform: translateY(-2px);
     }
+    /* Added a class for the loading state */
+    .btn-details.loading {
+      background-color: #666;
+      pointer-events: none;
+      transform: none;
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body id="top">
@@ -165,5 +172,14 @@
     </div>
   </footer>
 
+  <script>
+    document.querySelectorAll('.btn-details').forEach(button => {
+      button.addEventListener('click', function() {
+        // Change text and add loading class
+        this.innerHTML = 'Loading...';
+        this.classList.add('loading');
+      });
+    });
+  </script>
 </body>
 </html>
