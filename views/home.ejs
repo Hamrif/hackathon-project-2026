@@ -8,29 +8,49 @@
     <link rel="icon" type="image/png" href="/asset/logo.jpeg" />
   </head>
 
-  <body>
+<body id="top">
     <main class="frontpage">
-      <div id="overlay">
-        <nav class="navbar">
-          <div class="navlogo">
-            <img src="/asset/logo.jpeg" alt="logo" />
-          </div>
-          <div id="logo">What The Fridge?</div>
-        </nav>
-        <div class="herotext">
-          <h1>Turn leftover ingredients into delicious meals.</h1>
-          <p class="introtext">No food wasted. Endless recipes.</p>
-          <p>
-            Enter what's in your fridge to discover what you can cook today.
-          </p>
+        <div id="overlay">
 
-          <div class="input-group">
-            <button id="hero-input">Analyze button</button>
-            <button id="heroStart">Find Recipes</button>
-          </div>
-        </div>
+            <nav class="navbar">
+                <div class="navlogo">
+                    <img src="/asset/logo.jpeg" alt="logo">
+                </div>
+                <div id="logo">What The Fridge?</div>
+            </nav>
+            <div class="herotext">
+                <h1>Show us your fridge, We'll do the rest.</h1>
+                <p class="introtext">No food wasted. Endless recipes.</p>
+                <p>Enter what's in your fridge to discover what you can cook today.</p>
+
+                <div class="input-group">
+                    <button id="hero-input">Analyze button</button>
+                    <button id="heroStart">Find Recipes</button>
+                </div>
+            </div>
+
+          
+        
       </div>
     </main>
+
+    <footer class="footer">
+        <div class="back-to-top-container">
+            <a href="#top" id="backToTop">Back to Top ↑</a>
+        </div>
+
+        <div class="footer-links">
+            <p>&copy; 2026 What The Fridge?</p>
+            <div class="links">
+                <a href="#">About the Author</a>
+                <a href="#">GitHub</a>
+                <a href="#">Portfolio</a>
+            </div>
+        </div>
+    </footer>
+
+
+
     <form action="/analyze-image" method="POST" enctype="multipart/form-data">
       <input type="file" name="image" accept="image/*" required />
       <button type="submit">Analyze</button>
