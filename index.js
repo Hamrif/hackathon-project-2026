@@ -8,6 +8,7 @@ const port = 3000;
 const path = require("path");
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const SPOONACULAR_API_KEY = process.env.SPOONACULAR_API_KEY;
 const upload = multer({ storage: multer.memoryStorage() });
 const gemini_ai = new GoogleGenerativeAI(GEMINI_API_KEY);
 
@@ -60,14 +61,50 @@ app.post("/analyze-image", upload.single("image"), async (req, res) => {
         const response = await result.response;
         const response_text = response.text();
 
-        // 1. Parse the JSON string from Gemini into an actual JavaScript array
-        const ingredientsArray = JSON.parse(response_text);
+        // 1. Clean and Parse the JSON string from Gemini
+        const cleanedText = response_text.replace(/```json|```/g, "").trim();
+        let ingredientsArray = [];
+        try {
+            ingredientsArray = JSON.parse(cleanedText);
+        } catch (e) {
+            console.log("Gemini returned non-JSON text or empty response, assuming no ingredients found.");
+        }
+        if (!Array.isArray(ingredientsArray)) ingredientsArray = [];
 
-        // 2. Render the EJS file and inject the array into the page
-        res.render("ingredients.ejs", { ingredients: ingredientsArray });
+        // 2. Merge with existing ingredients (if any) and render
+        let existingIngredients = req.body.existingIngredients || [];
+        if (!Array.isArray(existingIngredients)) existingIngredients = [existingIngredients];
+        
+        const combinedIngredients = [...new Set([...existingIngredients, ...ingredientsArray])];
+
+        res.render("ingredients.ejs", { ingredients: combinedIngredients });
 
     } catch (error) {
         console.error("Error analyzing image:", error);
         res.status(500).send("Error analyzing image");
+    }
+});
+
+app.post("/get-recipes", async (req, res) => {
+    const ingredients = req.body.ingredients;
+
+    if (!ingredients) return res.status(400).send("No ingredients provided");
+
+    const ingredientsString = Array.isArray(ingredients) ? ingredients.join(",") : ingredients;
+
+    try {
+        const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(ingredientsString)}&number=10&apiKey=${SPOONACULAR_API_KEY}`);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Spoonacular API Error:", response.status, errorText);
+            throw new Error(`Failed to fetch recipes: ${response.status}`);
+        }
+        
+        const recipes = await response.json();
+        res.render("recipes.ejs", { recipes: recipes });
+    } catch (error) {
+        console.error("Error fetching recipes:", error);
+        res.status(500).send("Error fetching recipes");
     }
 });

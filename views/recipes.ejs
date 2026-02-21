@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<link rel="stylesheet"  href="style3.css">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suggested Recipes</title>
+    <style>
+        body { font-family: sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .recipes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        .recipe-card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .recipe-card img { width: 100%; height: 200px; object-fit: cover; }
+        .recipe-content { padding: 15px; }
+        .recipe-title { font-size: 1.1em; margin: 0 0 10px 0; font-weight: bold; }
+        .back-link { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; }
+    </style>
+</head>
+<body>
+    <a href="/home" class="back-link">&larr; Back to Home</a>
+    <h1>Suggested Recipes</h1>
+
+    <div class="recipes-grid">
+        <% if (recipes && recipes.length > 0) { %>
+            <% recipes.forEach(function(recipe) { %>
+                <div class="recipe-card">
+                    <img src="<%= recipe.image %>" alt="<%= recipe.title %>">
+                    <div class="recipe-content">
+                        <div class="recipe-title"><%= recipe.title %></div>
+                        <p><strong>Used Ingredients:</strong> <%= recipe.usedIngredientCount %></p>
+                        <p><strong>Missed Ingredients:</strong> <%= recipe.missedIngredientCount %></p>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No recipes found matching your ingredients.</p>
+        <% } %>
+    </div>
+</body>
+</html>
