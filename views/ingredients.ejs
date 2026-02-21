@@ -47,25 +47,8 @@
         </div>
 
         <div class="right-panel">
-            <div class="recipe-results">
-                <% if (typeof recipes !== 'undefined' && recipes.length > 0) { %>
-                    <div class="recipe-grid">
-                        <% recipes.forEach(function(recipe) { %>
-                            <div class="recipe-card">
-                                <img src="<%= recipe.image %>" alt="<%= recipe.title %>">
-                                <div class="recipe-info">
-                                    <h4><%= recipe.title %></h4>
-                                    <p class="match-text">You have <strong><%= recipe.usedIngredientCount %></strong> ingredients.</p>
-                                </div>
-                            </div>
-                        <% }); %>
-                    </div>
-                <% } else { %>
-                    <div class="placeholder-content">
-                        <h2>Your recipes will appear here.</h2>
-                        <p>Upload a photo or add ingredients to get started.</p>
-                    </div>
-                <% } %>
+            <div class="ingredients-hero">
+                <img class="rightHero" src="/asset/burger.jpg">
             </div>
 
             <button id="generateRecipeBtn" class="generate-btn">Generate Recipe</button>
