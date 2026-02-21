@@ -209,6 +209,30 @@
             this.innerHTML = '<div class="shimmer"></div><span class="generate-inner">⏳ Cooking up ideas…</span>';
             this.style.opacity = '0.8';
             this.style.pointerEvents = 'none';
+
+            // Get ingredients
+            const ingredients = [];
+            list.querySelectorAll('.ingredient-item .item-text').forEach(span => {
+                const text = span.textContent.trim();
+                if (text) ingredients.push(text);
+            });
+
+            // Send to server
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/get-recipes';
+            form.style.display = 'none';
+
+            ingredients.forEach(ing => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ingredients';
+                input.value = ing;
+                form.appendChild(input);
+            });
+
+            document.body.appendChild(form);
+            form.submit();
         });
 
         // ── Button ripple
