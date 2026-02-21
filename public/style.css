@@ -87,24 +87,56 @@
 }
 
 #hero-input {
-      background-color: #5c7d3e; /* Vibrant matcha green */
-    color: white;
-    font-weight: bold;
-    font-size: 1.1rem;
-    padding: 0 25px;
-    height: 55px;
-    width :20rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  padding: 0 40px;
+  height: 60px;
+  width: 22rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #e8f5e9;
+
+  background: linear-gradient(130deg, #04291b 0%, #5c7d3e 50%, #c9a84c 100%);
+  background-size: 200% 200%;
+  background-position: left center;
+
+  box-shadow: 0 6px 28px rgba(92, 125, 62, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#hero-input::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  animation: shimmerSweep 2.8s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
 }
 
+#hero-input span {
+  position: relative;
+  z-index: 1;
+}
 #hero-input:hover {
-    background-color:#04291b; /* Darker green on hover */
-
+  background-position: right center;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(92, 125, 62, 0.55), 0 0 60px rgba(201, 168, 76, 0.12);
 }
-
+#hero-input:active {
+  transform: translateY(-1px);
+}
+@keyframes shimmerSweep {
+  0%        { left: -100%; }
+  40%, 100% { left: 100%; }
+}
 #heroStart {
     background-color: #5c7d3e; /* Vibrant matcha green */
     color: white;

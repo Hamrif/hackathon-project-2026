@@ -3,57 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingredients - What the fridge?</title>
-    <link rel="stylesheet" href="/style2.css"> 
+    <title>Ingredients – What the Fridge?</title>
+    <link rel="stylesheet" href="/style2.css">
+    <link rel="icon" type="image/png" href="/asset/logo.jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
-<body class="dashboard-body">
 
-    <nav class="navbar dashboard-nav">
+<body>
+
+    <!-- Floating orbs background (same as homepage) -->
+    <div class="float-orb orb-1"></div>
+    <div class="float-orb orb-2"></div>
+    <div class="float-orb orb-3"></div>
+
+    <!-- NAVBAR — identical to homepage -->
+    <nav class="navbar">
         <div class="navlogo">
-            <img src="/asset/logo.jpeg" alt="logo">
+            <img src="/asset/real bg.png" alt="logo">
         </div>
         <div id="logo">What The Fridge?</div>
+        <a href="/home" class="nav-back">← Home</a>
     </nav>
 
-    <div class="dashboard-container">
-        
-        <div class="left-panel">
+    <!-- PAGE CONTENT -->
+    <div class="page-wrapper">
+
+        <div class="page-header">
             
-            <div class="input-section">
-                <form action="/analyze-image" method="POST" enctype="multipart/form-data" class="wireframe-form">
-                    <input type="file" name="image" accept="image/*" required class="wireframe-input" />
-                    <button type="submit" class="wireframe-btn">Analyze</button>
-                </form>
-            </div>
+            <h1 class="page-title">What's in your fridge?</h1>
+            <p class="page-sub">Scan your fridge or type in ingredients — we'll craft the perfect recipe.</p>
+        </div>
 
-            <div class="input-section">
-                <div class="wireframe-form">
-                    <input type="text" id="ingredientInput" placeholder="Text input here..." class="wireframe-input">
-                    <button type="button" id="addBtn" class="wireframe-btn">Add</button>
+        <div class="dashboard-container">
+
+            <!-- LEFT: Inputs -->
+            <div class="left-panel">
+
+                <!-- Image Upload -->
+                <div class="input-card">
+                    <div class="input-card-header">
+                        <span class="card-icon">📷</span>
+                        <div>
+                            <div class="card-title">Scan Your Fridge</div>
+                            <div class="card-desc">Upload a photo and we'll detect the ingredients</div>
+                        </div>
+                    </div>
+                    <form action="/analyze-image" method="POST" enctype="multipart/form-data" class="input-row">
+                        <label class="file-label">
+                            <input type="file" name="image" accept="image/*" required class="file-input-hidden" id="fileInput"/>
+                            <span class="file-label-text" id="fileLabel">Choose photo…</span>
+                        </label>
+                        <button type="submit" class="action-btn primary-btn">
+                            Analyze
+                        </button>
+                    </form>
                 </div>
+
+                <!-- Text Input -->
+                <div class="or-divider"><span>or</span></div>
+
+                <div class="input-card">
+                    <div class="input-card-header">
+                        <span class="card-icon">✏️</span>
+                        <div>
+                            <div class="card-title">Type Ingredients</div>
+                            <div class="card-desc">Add them one by one</div>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="ingredientInput" placeholder="e.g. Eggs, garlic, spinach…" class="text-input">
+                        <button type="button" id="addBtn" class="action-btn secondary-btn">Add</button>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="list-section">
-                <ul id="ingredientList">
-                    <% if (typeof ingredients !== 'undefined' && ingredients.length > 0) { %>
-                        <% ingredients.forEach(function(item) { %>
-                            <li><%= item %> <button class="remove-btn">x</button></li>
-                        <% }); %>
-                    <% } else { %>
-                        <p class="empty-state">No ingredients added yet.</p>
-                    <% } %>
-                </ul>
+            <!-- RIGHT: List + Generate -->
+            <div class="right-panel">
+                <div class="list-card">
+                    <div class="list-header">
+                        <span class="card-icon">🧺</span>
+                        <div class="card-title">My Ingredients</div>
+                        <span class="count-badge" id="ingredientCount">0</span>
+                    </div>
+
+                    <ul id="ingredientList">
+                        <% if (typeof ingredients !== 'undefined' && ingredients.length > 0) { %>
+                            <% ingredients.forEach(function(item) { %>
+                                <li class="ingredient-item">
+                                    <span class="item-dot"></span>
+                                    <span class="item-text"><%= item %></span>
+                                    <button class="remove-btn" title="Remove">✕</button>
+                                </li>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="empty-state" id="emptyState">
+                                <div class="empty-icon">🥦</div>
+                                <p>No ingredients yet.</p>
+                                <p class="empty-hint">Add some from the left!</p>
+                            </div>
+                        <% } %>
+                    </ul>
+                </div>
+
+                <button id="generateRecipeBtn" class="generate-btn">
+                    <div class="shimmer"></div>
+                    <span class="generate-inner">
+                       
+                        Generate Recipe
+                    </span>
+                </button>
             </div>
-        </div>
 
-        <div class="right-panel">
-            <button id="generateRecipeBtn" class="generate-btn">Generate Recipe</button>
         </div>
-
     </div>
-    
-    <script src="app.js">
-        
+
+
+
+    <script>
+        // ── File input label update
+        document.getElementById('fileInput').addEventListener('change', function() {
+            const label = document.getElementById('fileLabel');
+            label.textContent = this.files[0] ? this.files[0].name : 'Choose photo…';
+        });
+
+        // ── Ingredient logic
+        const input = document.getElementById('ingredientInput');
+        const addBtn = document.getElementById('addBtn');
+        const list = document.getElementById('ingredientList');
+        const countEl = document.getElementById('ingredientCount');
+
+        function getCount() {
+            return list.querySelectorAll('.ingredient-item').length;
+        }
+
+        function updateCount() {
+            const c = getCount();
+            countEl.textContent = c;
+            countEl.style.background = c > 0 ? 'var(--green-mid)' : 'rgba(255,255,255,0.1)';
+        }
+        updateCount();
+
+        function addIngredient() {
+            const val = input.value.trim();
+            if (!val) {
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 400);
+                return;
+            }
+
+            // Hide empty state
+            const empty = document.getElementById('emptyState');
+            if (empty) empty.style.display = 'none';
+
+            const li = document.createElement('li');
+            li.className = 'ingredient-item entering';
+            li.innerHTML = `
+                <span class="item-dot"></span>
+                <span class="item-text">${val}</span>
+                <button class="remove-btn" title="Remove">✕</button>
+            `;
+            list.appendChild(li);
+            requestAnimationFrame(() => li.classList.remove('entering'));
+
+            li.querySelector('.remove-btn').addEventListener('click', () => removeItem(li));
+
+            input.value = '';
+            input.focus();
+            updateCount();
+            list.scrollTop = list.scrollHeight;
+        }
+
+        function removeItem(li) {
+            li.classList.add('leaving');
+            setTimeout(() => {
+                li.remove();
+                updateCount();
+                if (getCount() === 0) {
+                    const empty = document.getElementById('emptyState');
+                    if (empty) empty.style.display = 'flex';
+                    else {
+                        list.innerHTML = `<div class="empty-state" id="emptyState"><div class="empty-icon">🥦</div><p>No ingredients yet.</p><p class="empty-hint">Add some from the left!</p></div>`;
+                    }
+                }
+            }, 300);
+        }
+
+        addBtn.addEventListener('click', addIngredient);
+        input.addEventListener('keydown', e => { if (e.key === 'Enter') addIngredient(); });
+
+        // Wire up server-rendered remove btns
+        list.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', () => removeItem(btn.closest('li')));
+        });
+
+        // ── Generate button
+        document.getElementById('generateRecipeBtn').addEventListener('click', function() {
+            if (getCount() === 0) {
+                this.textContent = '⚠ Add some ingredients first!';
+                setTimeout(() => { this.innerHTML = '<div class="shimmer"></div><span class="generate-inner"><span>✦</span> Generate Recipe</span>'; }, 2000);
+                return;
+            }
+            this.innerHTML = '<div class="shimmer"></div><span class="generate-inner">⏳ Cooking up ideas…</span>';
+            this.style.opacity = '0.8';
+            this.style.pointerEvents = 'none';
+        });
+
+        // ── Button ripple
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const r = document.createElement('span');
+                r.className = 'ripple';
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(this.offsetWidth, this.offsetHeight);
+                r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+                this.appendChild(r);
+                setTimeout(() => r.remove(), 600);
+            });
+        });
     </script>
+
+    <script src="app.js"></script>
 </body>
 </html>
