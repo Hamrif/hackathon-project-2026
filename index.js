@@ -22,16 +22,17 @@ app.listen(port, () => {
     console.log(`listening to port ${port}`);
 });
 
-// --- YOUR ROUTES SHOULD ALL BE AT THIS TOP LEVEL ---
+
 
 app.get("/home", (req, res) => {
     res.render("home.ejs");
 });
 
-// Updated to plural /ingredients to match your request
+
 app.get("/ingredients", (req, res) => {
-    // Pass an empty array initially so the page loads cleanly
-    res.render("ingredients.ejs", { ingredients: [] });
+    // Test data so we don't have to rely on api
+    const testIngredients = ["chicken breast", "garlic", "onion", "tomatoes", "olive oil", "rice", "bell pepper", "cheese"];
+    res.render("ingredients.ejs", { ingredients: testIngredients });
 });
 
 app.post("/analyze-image", upload.single("image"), async (req, res) => {
@@ -81,19 +82,149 @@ app.post("/analyze-image", upload.single("image"), async (req, res) => {
 
     } catch (error) {
         console.error("Error analyzing image:", error);
-        res.status(500).send("Error analyzing image");
     }
 });
+
+// Test data so that we don't have to rely on api
+const TEST_RECIPES = [
+  {
+    "id": 642303,
+    "title": "Eggplant Pizzette",
+    "image": "https://img.spoonacular.com/recipes/642303-312x231.jpg",
+    "usedIngredientCount": 2,
+    "missedIngredientCount": 2,
+    "missedIngredients": [
+      { "id": 11209, "name": "eggplant", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/eggplant.png" },
+      { "id": 2044, "name": "basil", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/fresh-basil.jpg" }
+    ],
+    "usedIngredients": [
+      { "id": 11529, "name": "tomatoes", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/tomato.png" },
+      { "id": 1041009, "name": "cheese", "aisle": "Cheese", "image": "https://img.spoonacular.com/ingredients_100x100/cheddar-cheese.png" }
+    ]
+  },
+  {
+    "id": 657610,
+    "title": "Quick N' Easy Basil Pesto",
+    "image": "https://img.spoonacular.com/recipes/657610-312x231.jpg",
+    "usedIngredientCount": 2,
+    "missedIngredientCount": 2,
+    "missedIngredients": [
+      { "id": 2044, "name": "basil leaves", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/fresh-basil.jpg" },
+      { "id": 12147, "name": "pine nuts", "aisle": "Baking", "image": "https://img.spoonacular.com/ingredients_100x100/pine-nuts.png" }
+    ],
+    "usedIngredients": [
+      { "id": 11215, "name": "garlic", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/garlic.png" },
+      { "id": 1032, "name": "parmesan cheese", "aisle": "Cheese", "image": "https://img.spoonacular.com/ingredients_100x100/parmesan.jpg" }
+    ]
+  },
+  {
+    "id": 1165783,
+    "title": "Slow Cooker Ranch Chicken",
+    "image": "https://img.spoonacular.com/recipes/1165783-312x231.jpg",
+    "usedIngredientCount": 2,
+    "missedIngredientCount": 2,
+    "missedIngredients": [
+      { "id": 6194, "name": "chicken broth", "aisle": "Canned and Jarred", "image": "https://img.spoonacular.com/ingredients_100x100/chicken-broth.png" },
+      { "id": 93733, "name": "ranch seasoning", "aisle": "Oil, Vinegar, Salad Dressing", "image": "https://img.spoonacular.com/ingredients_100x100/oregano-dried.png" }
+    ],
+    "usedIngredients": [
+      { "id": 5062, "name": "chicken breasts", "aisle": "Meat", "image": "https://img.spoonacular.com/ingredients_100x100/chicken-breasts.png" },
+      { "id": 1041009, "name": "cheese", "aisle": "Cheese", "image": "https://img.spoonacular.com/ingredients_100x100/cheddar-cheese.png" }
+    ]
+  },
+  {
+    "id": 651225,
+    "title": "Mashed Potatoes with Garlic, Sage & Goat Cheese",
+    "image": "https://img.spoonacular.com/recipes/651225-312x231.jpg",
+    "usedIngredientCount": 2,
+    "missedIngredientCount": 2,
+    "missedIngredients": [
+      { "id": 11353, "name": "baking potatoes", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/russet-or-idaho-potatoes.png" },
+      { "id": 99226, "name": "sage", "aisle": "Spices and Seasonings", "image": "https://img.spoonacular.com/ingredients_100x100/fresh-sage.png" }
+    ],
+    "usedIngredients": [
+      { "id": 11215, "name": "garlic", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/garlic.png" },
+      { "id": 1041009, "name": "cheese", "aisle": "Cheese", "image": "https://img.spoonacular.com/ingredients_100x100/cheddar-cheese.png" }
+    ]
+  },
+  {
+    "id": 648368,
+    "title": "Jalapeno Queso With Goat Cheese",
+    "image": "https://img.spoonacular.com/recipes/648368-312x231.jpg",
+    "usedIngredientCount": 2,
+    "missedIngredientCount": 2,
+    "missedIngredients": [
+      { "id": 11979, "name": "jalapeno pepper", "aisle": "Canned and Jarred", "image": "https://img.spoonacular.com/ingredients_100x100/jalapeno-pepper.png" },
+      { "id": 6168, "name": "hot sauce", "aisle": "Condiments", "image": "https://img.spoonacular.com/ingredients_100x100/hot-sauce-or-tabasco.png" }
+    ],
+    "usedIngredients": [
+      { "id": 1159, "name": "goat cheese", "aisle": "Cheese", "image": "https://img.spoonacular.com/ingredients_100x100/goat-cheese.jpg" },
+      { "id": 11529, "name": "tomatoes", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/tomato.png" }
+    ]
+  },
+  {
+    "id": 1674265,
+    "title": "Easy Tomato Soup",
+    "image": "https://img.spoonacular.com/recipes/1674265-312x231.jpg",
+    "usedIngredientCount": 2,
+    "missedIngredientCount": 2,
+    "missedIngredients": [
+      { "id": 1001, "name": "butter", "aisle": "Milk, Eggs, Other Dairy", "image": "https://img.spoonacular.com/ingredients_100x100/butter-sliced.jpg" },
+      { "id": 6615, "name": "vegetable broth", "aisle": "Canned and Jarred", "image": "https://img.spoonacular.com/ingredients_100x100/chicken-broth.png" }
+    ],
+    "usedIngredients": [
+      { "id": 11529, "name": "tomatoes", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/tomato.png" },
+      { "id": 11282, "name": "onion", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/brown-onion.png" }
+    ]
+  },
+  {
+    "id": 999001,
+    "title": "Simple Garlic Rice",
+    "image": "https://img.spoonacular.com/recipes/716426-312x231.jpg",
+    "usedIngredientCount": 3,
+    "missedIngredientCount": 0,
+    "missedIngredients": [],
+    "usedIngredients": [
+      { "id": 11215, "name": "garlic", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/garlic.png" },
+      { "id": 20444, "name": "rice", "aisle": "Pasta and Rice", "image": "https://img.spoonacular.com/ingredients_100x100/uncooked-white-rice.png" },
+      { "id": 4053, "name": "olive oil", "aisle": "Oil, Vinegar, Salad Dressing", "image": "https://img.spoonacular.com/ingredients_100x100/olive-oil.jpg" }
+    ]
+  },
+  {
+    "id": 999002,
+    "title": "Chicken Stir Fry with Bell Peppers",
+    "image": "https://img.spoonacular.com/recipes/716408-312x231.jpg",
+    "usedIngredientCount": 4,
+    "missedIngredientCount": 1,
+    "missedIngredients": [
+      { "id": 16124, "name": "soy sauce", "aisle": "Condiments", "image": "https://img.spoonacular.com/ingredients_100x100/soy-sauce.jpg" }
+    ],
+    "usedIngredients": [
+      { "id": 5062, "name": "chicken breast", "aisle": "Meat", "image": "https://img.spoonacular.com/ingredients_100x100/chicken-breasts.png" },
+      { "id": 10211821, "name": "bell pepper", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/bell-pepper-orange.png" },
+      { "id": 11215, "name": "garlic", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/garlic.png" },
+      { "id": 11282, "name": "onion", "aisle": "Produce", "image": "https://img.spoonacular.com/ingredients_100x100/brown-onion.png" }
+    ]
+  }
+];
 
 app.post("/get-recipes", async (req, res) => {
     const ingredients = req.body.ingredients;
 
     if (!ingredients) return res.status(400).send("No ingredients provided");
 
+    // Use test data instead of calling API
+    const USE_TEST_DATA = true;
+
+    if (USE_TEST_DATA) {
+        res.render("recipes.ejs", { recipes: TEST_RECIPES });
+        return;
+    }
+
     const ingredientsString = Array.isArray(ingredients) ? ingredients.join(",") : ingredients;
 
     try {
-        const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(ingredientsString)}&number=10&apiKey=${SPOONACULAR_API_KEY}`);
+        const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(ingredientsString)}&number=20&ranking=2&apiKey=${SPOONACULAR_API_KEY}`);
         
         if (!response.ok) {
             const errorText = await response.text();
@@ -102,9 +233,11 @@ app.post("/get-recipes", async (req, res) => {
         }
         
         const recipes = await response.json();
+        console.log("=== SPOONACULAR RESPONSE ===");
+        console.log(JSON.stringify(recipes, null, 2));
+        console.log("=== END SPOONACULAR RESPONSE ===");
         res.render("recipes.ejs", { recipes: recipes });
     } catch (error) {
         console.error("Error fetching recipes:", error);
-        res.status(500).send("Error fetching recipes");
     }
 });
