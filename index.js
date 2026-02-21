@@ -22,12 +22,9 @@ app.listen(port, () => {
     console.log(`listening to port ${port}`);
 });
 
-
-
 app.get("/home", (req, res) => {
     res.render("home.ejs");
 });
-
 
 app.get("/ingredients", (req, res) => {
     // Test data so we don't have to rely on api
@@ -215,7 +212,6 @@ const TEST_RECIPES = [
   }
 ];
 
-
 function isOptionalAisle(aisle) {
     if (!aisle) return false;
     const a = aisle.toLowerCase();
@@ -246,7 +242,7 @@ function processRecipes(recipes) {
 
         if (requiredMissing.length <= 3) {
             const processed = {
-                id: r.id,
+                id: r.id, // ADDED: Required to fetch specific instructions later
                 title: r.title,
                 image: r.image,
                 used: used,
@@ -292,7 +288,6 @@ const TEST_RECIPE_DETAILS = {
 app.post("/get-recipes", async (req, res) => {
     const ingredients = req.body.ingredients;
 
-
     // Use test data instead of calling API
     const USE_TEST_DATA = true;
 
@@ -323,30 +318,29 @@ app.post("/get-recipes", async (req, res) => {
     }
 });
 
-app.get("/recipe/:id", async (req, res) => {
-    const id = req.params.id;
-    
-    // Set this to FALSE to use the real Spoonacular API
-    const USE_TEST_DATA = true; 
+// ADDED: New route to handle modal instruction fetching
+app.get("/api/recipe/:id", async (req, res) => {
+    const { id } = req.params;
+    const USE_TEST_DATA = true; // Set to false when you want to use the real API
 
     if (USE_TEST_DATA) {
-        // Updated to render recipe.ejs
-        res.render("recipes.ejs", { recipe: TEST_RECIPE_DETAILS });
-        return;
+        return res.json({
+            instructions: "1. Chop ingredients.\n2. Sauté garlic and onions.\n3. Add remaining ingredients and cook thoroughly.\n4. Serve warm and enjoy!",
+            sourceUrl: "#"
+        });
     }
 
     try {
         const response = await fetch(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${SPOONACULAR_API_KEY}`);
+        if (!response.ok) throw new Error("Failed to fetch recipe info");
         
-        if (!response.ok) {
-            throw new Error(`Failed to fetch recipe details: ${response.status}`);
-        }
-
-        const recipe = await response.json();
-        // Updated to render recipe.ejs
-        res.render("recipes.ejs", { recipe }); 
+        const data = await response.json();
+        res.json({
+            instructions: data.instructions || "No detailed instructions provided.",
+            sourceUrl: data.sourceUrl
+        });
     } catch (error) {
-        console.error("Error fetching recipe details:", error);
-        res.status(500).send("Error fetching recipe details");
+        console.error("Error fetching instructions:", error);
+        res.status(500).json({ error: "Failed to load instructions." });
     }
 });
