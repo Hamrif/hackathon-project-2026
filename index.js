@@ -28,7 +28,7 @@ app.get("/home", (req, res) => {
 
 app.get("/ingredients", (req, res) => {
     // Test data so we don't have to rely on api
-    USE_TEST_DATA = true;
+    USE_TEST_DATA = false;
     
     const testIngredients = ["chicken breast", "garlic", "onion", "tomatoes", "olive oil", "rice", "bell pepper", "cheese"];
 
@@ -260,11 +260,36 @@ function processRecipes(recipes) {
     return { readyToCook, shoppingRequired };
 }
 
+// Test data for recipe details
+const TEST_RECIPE_DETAILS = {
+    id: 642303,
+    title: "Eggplant Pizzette",
+    image: "https://img.spoonacular.com/recipes/642303-556x370.jpg",
+    readyInMinutes: 45,
+    servings: 4,
+    summary: "A delicious eggplant pizzette recipe.",
+    extendedIngredients: [
+        { original: "1 large eggplant" },
+        { original: "2 tomatoes" },
+        { original: "1/2 cup cheese" }
+    ],
+    analyzedInstructions: [
+        {
+            name: "",
+            steps: [
+                { number: 1, step: "Slice the eggplant into rounds." },
+                { number: 2, step: "Top with tomatoes and cheese." },
+                { number: 3, step: "Bake at 400F for 20 minutes." }
+            ]
+        }
+    ]
+};
+
 app.post("/get-recipes", async (req, res) => {
     const ingredients = req.body.ingredients;
 
     // Use test data instead of calling API
-    const USE_TEST_DATA = true;
+    const USE_TEST_DATA = false;
 
     if (USE_TEST_DATA) {
         const { readyToCook, shoppingRequired } = processRecipes(TEST_RECIPES);
@@ -296,7 +321,7 @@ app.post("/get-recipes", async (req, res) => {
 // ADDED: New route to handle modal instruction fetching
 app.get("/api/recipe/:id", async (req, res) => {
     const { id } = req.params;
-    const USE_TEST_DATA = true; // Set to false when you want to use the real API
+    const USE_TEST_DATA = false; // Set to false when you want to use the real API
 
     if (USE_TEST_DATA) {
         return res.json({
