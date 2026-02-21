@@ -264,7 +264,6 @@ function processRecipes(recipes) {
 app.post("/get-recipes", async (req, res) => {
     const ingredients = req.body.ingredients;
 
-    if (!ingredients) return res.status(400).send("No ingredients provided");
 
     // Use test data instead of calling API
     const USE_TEST_DATA = true;
@@ -274,6 +273,8 @@ app.post("/get-recipes", async (req, res) => {
         res.render("recipes.ejs", { readyToCook, shoppingRequired });
         return;
     }
+
+    if (!ingredients) return res.status(400).send("No ingredients provided");
 
     const ingredientsString = Array.isArray(ingredients) ? ingredients.join(",") : ingredients;
 
