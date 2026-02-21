@@ -2,7 +2,7 @@
     padding: 0px;
     margin: 0px;
     box-sizing: border-box; /* Ensures padding doesn't mess with widths */
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:'Times New Roman', Times, serif;
 }
 
 .frontpage {
@@ -213,7 +213,7 @@
 
 /* --- LEFT PANEL --- */
 .left-panel {
-    width: 70%;
+    width:70%;
     border-right: 3px solid #04291b;
     padding: 30px;
     background-color: beige;
@@ -289,12 +289,14 @@
 
 /* --- RIGHT PANEL --- */
 .right-panel {
-    width: 35%;
+    width: 30%;
     
     display: flex;
     flex-direction: column;
-    background-color: #fafdfa;
+    background-color: red;
     overflow: hidden; /* Locks the entire right panel so it cannot scroll */
+    justify-content: center;
+    align-items: center;
 }
 
 .placeholder-content {
@@ -307,28 +309,28 @@
 }
 /* --- Generate Button (Bottom Right) --- */
 .generate-btn {
-    align-self: flex-end; /* Pushes to the right */
-    margin-top: 30px;
+    position: absolute;
+    bottom: 20%;      /* Pins it 20% up from the bottom edge */
+    left: 50%;        /* Moves the left edge to the center of the panel */
+    transform: translateX(-50%); /* Pulls it back by half its own width to perfectly center it */
+    
     padding: 15px 40px;
-    background-color: white;
+    background-color: yellow;
     color: #04291b;
     font-size: 1.2rem;
     font-weight: bold;
     border: 3px solid #04291b;
-    border-radius: 4px;
+    border-radius: 50px; /* Kept the pill shape */
     cursor: pointer;
     transition: all 0.2s;
-    /* Keeps it pinned if the list of recipes gets long */
-    position: sticky; 
-    bottom: 0;
-    border-radius: 50px;
-
+    z-index: 10;      /* Ensures it stays above the hero image */
 }
 
 .generate-btn:hover {
     background-color: #78A153;
     color: white;
     border-color: #78A153;
+    transform: translateX(-50%) scale(1.05); /* Keeps centering while adding a hover pop */
 }
 
 /* --- Recipe Grid (Inside Right Panel) --- */
@@ -398,4 +400,15 @@
 .generate-btn {
     position: relative;
     z-index: 10; 
+}
+.left-panel::-webkit-scrollbar,
+.recipe-results::-webkit-scrollbar {
+    display: none;
+}
+
+/* 2. For Firefox and IE/Edge */
+.left-panel,
+.recipe-results {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
 }
