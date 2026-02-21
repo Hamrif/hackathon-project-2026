@@ -1,10 +1,10 @@
-# AI Recipe Generator
+# WHAT THE FRIDGE? website
 
-A web application that helps you decide what to cook based on the ingredients you have. It uses Google's Gemini AI to identify ingredients from images and the Spoonacular API to suggest recipes.
+A web application that helps you decide what to cook based on the ingredients you have. It identifies ingredients from images and the  suggests recipes.
 
 ## Features
 
-Image Analysis: Upload a photo of your fridge or pantry, and Gemini AI will list the ingredients.
+Image Analysis: Upload a photo of your fridge or pantry and it fetches ingridients.
 
 Manual Entry: Manually add or remove ingredients from your list.
 
@@ -56,7 +56,7 @@ Frontend: EJS, HTML, CSS, JavaScript
 
 Frontend Architecture
 
-The application uses EJS (Embedded JavaScript Templates) to render dynamic UI pages on the server. This keeps the frontend lightweight while allowing backend data (Gemini & Spoonacular responses) to be injected directly into views.
+The application uses EJS (Embedded JavaScript Templates) to render dynamic UI pages on the server. This keeps the frontend lightweight while allowing backend data to be injected directly into views.
 
 ## View Templates
 
@@ -82,8 +82,6 @@ style.css – Global layout & base styles
 style2.css – Ingredient page styling
 
 style3.css – Home page styling
-
-recipes.css – Recipe display & card styling
 
 This separation avoids large monolithic stylesheets and reduces unintended styling conflicts.
 
