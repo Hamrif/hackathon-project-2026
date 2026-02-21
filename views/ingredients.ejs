@@ -158,6 +158,31 @@
                 form.submit();
             });
         }
+
+        // Handle image upload form to preserve existing ingredients
+        const uploadForm = document.querySelector('form[action="/analyze-image"]');
+        if (uploadForm) {
+            uploadForm.addEventListener('submit', function() {
+                const listItems = list.querySelectorAll('li');
+                listItems.forEach(li => {
+                    // Extract text content, ignoring the button element inside the li
+                    let text = '';
+                    li.childNodes.forEach(node => {
+                        if (node.nodeType === 3) { // Node.TEXT_NODE
+                            text += node.textContent;
+                        }
+                    });
+                    const trimmed = text.trim();
+                    if (trimmed) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'existingIngredients';
+                        input.value = trimmed;
+                        this.appendChild(input);
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>

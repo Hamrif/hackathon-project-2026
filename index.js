@@ -61,11 +61,23 @@ app.post("/analyze-image", upload.single("image"), async (req, res) => {
         const response = await result.response;
         const response_text = response.text();
 
-        // 1. Parse the JSON string from Gemini into an actual JavaScript array
-        const ingredientsArray = JSON.parse(response_text);
+        // 1. Clean and Parse the JSON string from Gemini
+        const cleanedText = response_text.replace(/```json|```/g, "").trim();
+        let ingredientsArray = [];
+        try {
+            ingredientsArray = JSON.parse(cleanedText);
+        } catch (e) {
+            console.log("Gemini returned non-JSON text or empty response, assuming no ingredients found.");
+        }
+        if (!Array.isArray(ingredientsArray)) ingredientsArray = [];
 
-        // 2. Render the EJS file and inject the array into the page
-        res.render("ingredients.ejs", { ingredients: ingredientsArray });
+        // 2. Merge with existing ingredients (if any) and render
+        let existingIngredients = req.body.existingIngredients || [];
+        if (!Array.isArray(existingIngredients)) existingIngredients = [existingIngredients];
+        
+        const combinedIngredients = [...new Set([...existingIngredients, ...ingredientsArray])];
+
+        res.render("ingredients.ejs", { ingredients: combinedIngredients });
 
     } catch (error) {
         console.error("Error analyzing image:", error);
